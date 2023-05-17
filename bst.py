@@ -185,8 +185,25 @@ class BinarySearchTree(Generic[K, I]):
     def kth_smallest(self, k: int, current: TreeNode) -> TreeNode:
         """
         Finds the kth smallest value by key in the subtree rooted at current.
+        O(D) where D is the maximum depth of the tree.
         """
-        raise NotImplementedError()
+        if current is None:
+            return None
+
+            # size of left subtree
+        left_size = current.left.subtree_size if current.left else 0
+
+        # check if kth smallest is in the left subtree
+        if k == left_size + 1:
+            return current
+
+        # search in the left subtree
+        elif k <= left_size:
+            return self.kth_smallest(k, current.left)
+
+        # search in the right subtree
+        else:
+            return self.kth_smallest(k - left_size - 1, current.right)
 
 # if __name__ == "__main__":
 #
