@@ -93,8 +93,10 @@ class BinarySearchTree(Generic[K, I]):
             self.length += 1
         elif key < current.key:
             current.left = self.insert_aux(current.left, key, item)
+            current.subtree_size += 1
         elif key > current.key:
             current.right = self.insert_aux(current.right, key, item)
+            current.subtree_size += 1
         else:  # key == current.key
             raise ValueError('Inserting duplicate item')
         return current
@@ -112,8 +114,10 @@ class BinarySearchTree(Generic[K, I]):
             raise ValueError('Deleting non-existent item')
         elif key < current.key:
             current.left  = self.delete_aux(current.left, key)
+            current.subtree_size -= 1
         elif key > current.key:
             current.right = self.delete_aux(current.right, key)
+            current.subtree_size -= 1
         else:  # we found our key => do actual deletion
             if self.is_leaf(current):
                 self.length -= 1
@@ -139,13 +143,19 @@ class BinarySearchTree(Generic[K, I]):
             It should be a child node having the smallest key among all the
             larger keys.
         """
-        raise NotImplementedError()
+        if current.right is not None:
+            return self.get_minimal(current.right)
+
+        return None
 
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
         """
-        raise NotImplementedError()
+        while current.left is not None:
+            current = current.left
+
+        return current
 
     def is_leaf(self, current: TreeNode) -> bool:
         """ Simple check whether or not the node is a leaf. """
@@ -177,3 +187,21 @@ class BinarySearchTree(Generic[K, I]):
         Finds the kth smallest value by key in the subtree rooted at current.
         """
         raise NotImplementedError()
+
+# if __name__ == "__main__":
+#
+#     BST = BinarySearchTree()
+#     BST[95] = 1
+#     BST[73] = 2
+#     BST[99] = 3
+#     print(BST.root.subtree_size)#, 3
+#     BST[50] = 4
+#     BST[85] = 5
+#     BST[80] = 6
+#
+#     print(BST.root.subtree_size)#, 6
+#     print(BST.root.left.subtree_size) #, 4
+#     print(BST.root.right.subtree_size)#, 1
+#     print(BST.root.left.left.subtree_size)#, 1
+#     print(BST.root.left.right.subtree_size)#, 2
+#     print(BST.root.left.right.left.subtree_size)#, 1
