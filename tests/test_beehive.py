@@ -11,11 +11,11 @@ class TestBeehiveSelector(unittest.TestCase):
     def test_simple(self):
         s = BeehiveSelector(5)
         b1, b2, b3, b4, b5 = (
-            Beehive(15, 12, 13, capacity=40, nutrient_factor=5, volume=15),
-            Beehive(25, 22, 23, capacity=15, nutrient_factor=8, volume=40),
-            Beehive(35, 32, 33, capacity=40, nutrient_factor=3, volume=40),
-            Beehive(45, 42, 43, capacity=1, nutrient_factor=85, volume=10),
-            Beehive(55, 52, 53, capacity=400, nutrient_factor=5000, volume=0),
+            Beehive(15, 12, 13, capacity=40, nutrient_factor=5, volume=15), # 15 * 5 = 75
+            Beehive(25, 22, 23, capacity=15, nutrient_factor=8, volume=40), # 15 * 8 = 120, v = 40- 15 = 25, 12 * 8 = 120
+            Beehive(35, 32, 33, capacity=40, nutrient_factor=3, volume=40), # 40 * 3 = 120, v = 40 - 40 = 0 , 0
+            Beehive(45, 42, 43, capacity=1, nutrient_factor=85, volume=10), #  1 * 85 = 85
+            Beehive(55, 52, 53, capacity=400, nutrient_factor=5000, volume=0), # 0
         )
         for hive in [b1, b2, b3, b4, b5]:
             s.add_beehive(hive)
