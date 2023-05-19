@@ -186,6 +186,8 @@ class BinarySearchTree(Generic[K, I]):
         """
         Finds the kth smallest value by key in the subtree rooted at current.
         O(D) where D is the maximum depth of the tree.
+        Since assume the depth of all BSTs are bounded by a factor of log(N) for the rest of the assessment,
+        O(log(N))
         """
         if current is None:
             return None

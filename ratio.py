@@ -20,14 +20,37 @@ class Percentiles(Generic[T]):
 
     def ratio(self, x, y):
         """
-        Computes a list of all items fitting the larger than/smaller than criteria. This list doesn't need to be sorted.
-        O(log(N)+O), where O is the number of points returned by the function.
+        Computes a list of all items fitting the larger than/smaller than criteria.
+        O(log(N) + O), where O is the number of points returned by the function.
         """
-        res: list = []
-        smaller: int = ceil(x / 100 * len(self.bst))
-        larger: int = len(self.bst) - ceil(y / 100 * len(self.bst))
-        for n in range(smaller, larger):
-            res.append(self.bst.kth_smallest(n + 1, self.bst.root).key)
+        res = []
+        smaller = ceil(x / 100 * len(self.bst))
+        larger = len(self.bst) - ceil(y / 100 * len(self.bst))
+
+        if smaller != 0:
+            smaller = self.bst.kth_smallest(smaller, self.bst.root).key
+        if larger != 0:
+            larger = self.bst.kth_smallest(larger, self.bst.root).key
+
+        # Traverse the binary search tree and store the items within the desired range
+        def collect_items_in_range(current, start_rank, end_rank, result):
+            """
+            Collects the items in the range [start_rank, end_rank] using in-order traversal.
+            Appends the items to the result list.
+            """
+            if current is None:
+                return
+
+            # In-order traversal
+            if start_rank < current.key:
+                collect_items_in_range(current.left, start_rank, end_rank, result)
+            if start_rank < current.key <= end_rank:
+                result.append(current.key)
+            if current.key < end_rank:
+                collect_items_in_range(current.right, start_rank, end_rank, result)
+
+        collect_items_in_range(self.bst.root, smaller, larger, res)
+        print(res)
         return res
 
 
