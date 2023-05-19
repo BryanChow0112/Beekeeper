@@ -50,7 +50,6 @@ class Percentiles(Generic[T]):
                 collect_items_in_range(current.right, start_rank, end_rank, result)
 
         collect_items_in_range(self.bst.root, smaller, larger, res)
-        print(res)
         return res
 
 
