@@ -17,6 +17,10 @@ class MaxHeap(Generic[T]):
     def __len__(self) -> int:
         return self.length
 
+    def clear(self) -> None:
+        """Clears the heap"""
+        self.length = 0
+
     def is_full(self) -> bool:
         return self.length + 1 == len(self.the_array)
 

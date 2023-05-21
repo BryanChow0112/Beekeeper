@@ -27,7 +27,6 @@ class BinarySearchTree(Generic[K, I]):
             Initialises an empty Binary Search Tree
             :complexity: O(1)
         """
-
         self.root = None
         self.length = 0
 
@@ -40,7 +39,6 @@ class BinarySearchTree(Generic[K, I]):
 
     def __len__(self) -> int:
         """ Returns the number of nodes in the tree. """
-
         return self.length
 
     def __contains__(self, key: K) -> bool:
@@ -109,11 +107,10 @@ class BinarySearchTree(Generic[K, I]):
             Attempts to delete an item from the tree, it uses the Key to
             determine the node to delete.
         """
-
         if current is None:  # key not found
             raise ValueError('Deleting non-existent item')
         elif key < current.key:
-            current.left  = self.delete_aux(current.left, key)
+            current.left = self.delete_aux(current.left, key)
             current.subtree_size -= 1
         elif key > current.key:
             current.right = self.delete_aux(current.right, key)
@@ -131,7 +128,7 @@ class BinarySearchTree(Generic[K, I]):
 
             # general case => find a successor
             succ = self.get_successor(current)
-            current.key  = succ.key
+            current.key = succ.key
             current.item = succ.item
             current.right = self.delete_aux(current.right, succ.key)
 
@@ -142,6 +139,11 @@ class BinarySearchTree(Generic[K, I]):
             Get successor of the current node.
             It should be a child node having the smallest key among all the
             larger keys.
+
+            Complexity:
+            - Worst case: O(D), see get_minimal(self, current: TreeNode) -> TreeNode
+            - Best case: O(1), when current.right is None
+
         """
         if current.right is not None:
             return self.get_minimal(current.right)
@@ -151,6 +153,12 @@ class BinarySearchTree(Generic[K, I]):
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
+
+            Complexity:
+            - Worst case: O(D), when the smallest key in the subtree is located at the leftmost path of the subtree,
+                          where D is the depth of tree.
+            - Best case: O(1), when the current node is already the node with the smallest key in the subtree.
+
         """
         while current.left is not None:
             current = current.left
@@ -185,14 +193,17 @@ class BinarySearchTree(Generic[K, I]):
     def kth_smallest(self, k: int, current: TreeNode) -> TreeNode:
         """
         Finds the kth smallest value by key in the subtree rooted at current.
-        O(D) where D is the maximum depth of the tree.
-        Since assume the depth of all BSTs are bounded by a factor of log(N) for the rest of the assessment,
-        O(log(N))
+
+        Complexity:
+        - Worst case: O(log(N)), when the desired kth_smallest value is located at the bottom of the subtree
+                      rooted at the current node, where N is the total number of nodes in the tree.
+        - Best case: O(1), when the current node is already the kth_smallest value.
+
         """
         if current is None:
             return None
 
-            # size of left subtree
+        # get size of left subtree
         left_size = current.left.subtree_size if current.left else 0
 
         # check if kth smallest is in the left subtree
@@ -206,21 +217,3 @@ class BinarySearchTree(Generic[K, I]):
         # search in the right subtree
         else:
             return self.kth_smallest(k - left_size - 1, current.right)
-
-# if __name__ == "__main__":
-#
-#     BST = BinarySearchTree()
-#     BST[95] = 1
-#     BST[73] = 2
-#     BST[99] = 3
-#     print(BST.root.subtree_size)#, 3
-#     BST[50] = 4
-#     BST[85] = 5
-#     BST[80] = 6
-#
-#     print(BST.root.subtree_size)#, 6
-#     print(BST.root.left.subtree_size) #, 4
-#     print(BST.root.right.subtree_size)#, 1
-#     print(BST.root.left.left.subtree_size)#, 1
-#     print(BST.root.left.right.subtree_size)#, 2
-#     print(BST.root.left.right.left.subtree_size)#, 1

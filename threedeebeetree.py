@@ -11,16 +11,26 @@ class BeeNode:
     key: Point
     item: I
     subtree_size: int = 1
-    octant1: BeeNode | None = None #(<<<)
-    octant2: BeeNode | None = None #(<<>=)
-    octant3: BeeNode | None = None #(<>=<)
-    octant4: BeeNode | None = None #(<>=>=)
-    octant5: BeeNode | None = None #(>=<<)
-    octant6: BeeNode | None = None #(>=<>=)
-    octant7: BeeNode | None = None #(>=>=<)
-    octant8: BeeNode | None = None #(>=>=>=)
+
+    octant1: BeeNode | None = None  # (< < <)
+    octant2: BeeNode | None = None  # (< < >=)
+    octant3: BeeNode | None = None  # (< >= <)
+    octant4: BeeNode | None = None  # (< >= >=)
+    octant5: BeeNode | None = None  # (>= < <)
+    octant6: BeeNode | None = None  # (>= < >=)
+    octant7: BeeNode | None = None  # (>= >= <)
+    octant8: BeeNode | None = None  # (>= >= >=)
 
     def get_child_for_key(self, point: Point) -> BeeNode | None:
+        """
+        Return one of the node's children (either a BeeNode or None) depending on the key and which octant it resides in.
+
+        Complexity
+        - Worst case: O(1), series of conditional checks are performed in a fixed number of steps,
+                      regardless of the input size
+        - Best case: O(1), same as worst case
+
+        """
         if point[0] < self.key[0]:
             if point[1] < self.key[1]:
                 if point[2] < self.key[2]:
@@ -36,6 +46,7 @@ class BeeNode:
                 else:
                     if self.octant4 is not None:
                         return self.octant4
+
         else:
             if point[1] < self.key[1]:
                 if point[2] < self.key[2]:
@@ -51,9 +62,8 @@ class BeeNode:
                 else:
                     if self.octant8 is not None:
                         return self.octant8
+
         return None
-
-
 
 
 class ThreeDeeBeeTree(Generic[I]):
@@ -61,7 +71,12 @@ class ThreeDeeBeeTree(Generic[I]):
 
     def __init__(self) -> None:
         """
-            Initialises an empty 3DBT
+        Initialises an empty 3DBT.
+
+        Complexity
+        - Worst case: O(1), initialisation operation is a constant time operation.
+        - Best case: O(1), same as worst case
+
         """
         self.root = None
         self.length = 0
@@ -74,7 +89,6 @@ class ThreeDeeBeeTree(Generic[I]):
 
     def __len__(self) -> int:
         """ Returns the number of nodes in the tree. """
-
         return self.length
 
     def __contains__(self, key: Point) -> bool:
@@ -95,11 +109,22 @@ class ThreeDeeBeeTree(Generic[I]):
         return node.item
 
     def get_tree_node_by_key(self, key: Point) -> BeeNode:
+        """
+        Return a BeeNode with the key specified.
+
+        Complexity
+        - Worst case: O(N), where N is the total number of nodes in the tree,
+                      when transversing the tree
+        - Best case: O(1), when the specified key matches the key of the root node.
+
+        """
         def get_tree_node_by_key_aux(current: BeeNode, key: Point) -> BeeNode:
             if current is None:
                 raise KeyError('Key not found: {0}'.format(key))
+
             elif key == current.key:
                 return current
+
             elif key[0] < current.key[0]:
                 if key[1] < current.key[1]:
                     if key[2] < current.key[2]:
@@ -111,6 +136,7 @@ class ThreeDeeBeeTree(Generic[I]):
                         return get_tree_node_by_key_aux(current.octant3, key)
                     else:
                         return get_tree_node_by_key_aux(current.octant4, key)
+
             elif key[0] >= current.key[0]:
                 if key[1] < current.key[1]:
                     if key[2] < current.key[2]:
@@ -131,10 +157,17 @@ class ThreeDeeBeeTree(Generic[I]):
     def insert_aux(self, current: BeeNode, key: Point, item: I) -> BeeNode:
         """
         Attempts to insert an item into the tree, using the Key to insert it
+
+        Complexity
+        - Worst case: O(N), where N is the total number of nodes in the tree,
+                      inserting at bottom of tree
+        - Best case: O(1), inserts the item at the root node.
+
         """
         if current is None:  # Base case: at the leaf
             current = BeeNode(key, item)
             self.length += 1
+
         elif key[0] < current.key[0]:
             if key[1] < current.key[1]:
                 if key[2] < current.key[2]:
@@ -143,11 +176,12 @@ class ThreeDeeBeeTree(Generic[I]):
                     current.octant2 = self.insert_aux(current.octant2, key, item)
             else:
                 if key[2] < current.key[2]:
-                    current.octant3 = self.insert_aux(current.octant3 , key, item)
+                    current.octant3 = self.insert_aux(current.octant3, key, item)
                 else:
                     current.octant4 = self.insert_aux(current.octant4, key, item)
             current.subtree_size += 1
-        elif  key[0] >= current.key[0]:
+
+        elif key[0] >= current.key[0]:
             if key[1] < current.key[1]:
                 if key[2] < current.key[2]:
                     current.octant5 = self.insert_aux(current.octant5, key, item)
@@ -155,16 +189,26 @@ class ThreeDeeBeeTree(Generic[I]):
                     current.octant6 = self.insert_aux(current.octant6, key, item)
             else:
                 if key[2] < current.key[2]:
-                    current.octant7 = self.insert_aux(current.octant7 , key, item)
+                    current.octant7 = self.insert_aux(current.octant7, key, item)
                 else:
-                    current.octant8  = self.insert_aux(current.octant8 , key, item)
+                    current.octant8 = self.insert_aux(current.octant8, key, item)
             current.subtree_size += 1
+
         else:  # key == current.key
             raise ValueError('Inserting duplicate item')
+
         return current
 
     def is_leaf(self, current: BeeNode) -> bool:
-        """ Simple check whether or not the node is a leaf. """
+        """
+        Simple check whether or not the node is a leaf.
+
+        Complexity
+        - Worst case: O(1), fixed number of checks are performed,
+                      regardless of the input size
+        - Best case: O(1), same as worst case
+
+        """
         return current.octant1 is None and current.octant2 is None and current.octant3 is None and \
                current.octant4 is None and current.octant5 is None and current.octant6 is None and current.octant7 is \
                None and current.octant8 is None

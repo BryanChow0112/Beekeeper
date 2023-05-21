@@ -10,18 +10,44 @@ I = TypeVar("I")
 class Percentiles(Generic[T]):
 
     def __init__(self) -> None:
+        """
+        Initialise the Percentiles class.
+
+        Complexity
+        - Worst case: O(1), initialisation operation is a constant time operation.
+        - Best case: O(1), same as worst case
+
+        """
         self.bst = BinarySearchTree()
 
     def add_point(self, item: T):
+        """
+        Adds a point to the object.
+
+        Complexity
+        - O(log(N)), N being the total number of points currently in the Percentile object
+
+        """
         self.bst[item] = None
 
     def remove_point(self, item: T):
+        """
+        Removes a point from the object.
+
+        Complexity
+        - O(log(N)), N being the total number of points currently in the Percentile object
+
+        """
         del self.bst[item]
 
     def ratio(self, x, y):
         """
         Computes a list of all items fitting the larger than/smaller than criteria.
-        O(log(N) + O), where O is the number of points returned by the function.
+
+        Complexity:
+        - O(log(N) + O), N being the total number of points currently in the Percentile object
+          where O is the number of points returned by the function.
+
         """
         res = []
         smaller = ceil(x / 100 * len(self.bst))
