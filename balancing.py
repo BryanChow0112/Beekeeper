@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from ratio import Percentiles
-from threedeebeetree import Point, BeeNode
-from math import floor
+from threedeebeetree import Point
 
 
 def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
@@ -12,9 +11,11 @@ def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
     res = []
 
     def make_ordering_inner(my_list):
+
         if len(my_list) <= 17:
             res.extend(my_list)
             return
+
         else:
             a = 12.5
 
@@ -61,6 +62,7 @@ def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
                             octant3.append(point)
                         else:
                             octant4.append(point)
+
                 else:
                     if point[1] < current_point[1]:
                         if point[2] < current_point[2]:
@@ -84,14 +86,3 @@ def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
 
     make_ordering_inner(my_coordinate_list)
     return res
-
-if __name__ == "__main__":
-    my_coordinate_list = [
-            (1, 2, 3),
-            (4, 5, 6),
-            (7, 8, 9),
-            (2, 3, 1),
-            (5, 6, 4),
-            (8, 9, 7),
-        ]
-    print(make_ordering(my_coordinate_list))
