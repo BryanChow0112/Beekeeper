@@ -45,8 +45,8 @@ class BeehiveSelector:
         provided as an argument.
 
         Complexity
-        - Worst case: O(M), where M is len(hive_list).
-        - Best case: O(M), same as worst case
+        - Worst case: O(M), where M is len(hive_list). Rising occurs, a bigger O(M) but still O(M)
+        - Best case: O(M), No rising occurs.
 
         """
         self.heap.clear()  # O(1)
@@ -58,10 +58,10 @@ class BeehiveSelector:
         """
         Complexity
         - Worst case: O(log(N)), where N is the number of beehives in the selector.
-        - Best case: O(log(N)), same as worst case
+        - Best case: O(1), when the element is smaller or equal than its parent
 
         """
-        self.heap.add(hive)  # O(log(N)
+        self.heap.add(hive)
 
     def harvest_best_beehive(self) -> Beehive:
         """
