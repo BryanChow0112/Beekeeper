@@ -33,11 +33,12 @@ class BeehiveSelector:
         Initialise the BeehiveSelector.
 
         Complexity
-        - Worst case: O(1), initialisation operation is a constant time operation.
-        - Best case: O(1), same as worst case
+        - Worst case: O(N), where N is the maximum size of the array.
+        - Best case: O(N), same as worst case
 
         """
-        self.heap = MaxHeap(max_beehives)
+        self.heap = MaxHeap(max_beehives)  # O(N)
+        self.max = max_beehives
 
     def set_all_beehives(self, hive_list: list[Beehive]):
         """
@@ -50,9 +51,7 @@ class BeehiveSelector:
 
         """
         self.heap.clear()  # O(1)
-
-        for hive in hive_list:  # O(M)
-            self.heap.add(hive)
+        self.heap = MaxHeap(self.max, hive_list)  # O(M)
 
     def add_beehive(self, hive: Beehive):
         """

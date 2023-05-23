@@ -10,9 +10,28 @@ from referential_array import ArrayR, T
 class MaxHeap(Generic[T]):
     MIN_CAPACITY = 1
 
-    def __init__(self, max_size: int) -> None:
+    def __init__(self, max_size: int, an_array: ArrayR[T] = None) -> None:
+        """
+        Initialise the MaxHeap.
+
+        Complexity
+        - Worst case: O(N log (N)), where N is the maximum size of the array or the length of an_array, whichever
+                      is larger, when an_array is provided
+        - Best case: O(N), where N is the maximum size of the array, when an_array is not provided
+
+        """
         self.length = 0
-        self.the_array = ArrayR(max(self.MIN_CAPACITY, max_size) + 1)
+        self.the_array = ArrayR(max(self.MIN_CAPACITY, max_size) + 1)  # O(N)
+
+        if an_array is not None:
+
+            self.length = len(an_array)
+            # copy an_array to self.the_array (shift by 1)
+            for i in range(self.length):  # O(N)
+                self.the_array[i + 1] = an_array[i]
+            # heapify every parent
+            for i in range(max_size // 2, 0, -1):  # O(N)
+                self.sink(i)  # O(log (N))
 
     def __len__(self) -> int:
         return self.length
@@ -86,12 +105,13 @@ class MaxHeap(Generic[T]):
             self.sink(1)
         return max_elt
 
+
 if __name__ == '__main__':
-    items = [ int(x) for x in input('Enter a list of numbers: ').strip().split() ]
+    items = [int(x) for x in input('Enter a list of numbers: ').strip().split()]
     heap = MaxHeap(len(items))
 
     for item in items:
         heap.add(item)
         
-    while(len(heap) > 0):
+    while len(heap) > 0:
         print(heap.get_max())
