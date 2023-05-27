@@ -3,7 +3,6 @@ from __future__ import annotations
 from ratio import Percentiles
 from threedeebeetree import Point
 
-
 def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
     """
     complexity: O(N * log(N)) where N is the number of element in input list
@@ -17,7 +16,8 @@ def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
             return
 
         else:
-            a = 12.5
+            n = len(my_list)
+            a = (n + 7) / 8 / n * 100
 
             p_x = Percentiles()
             p_y = Percentiles()
