@@ -2,7 +2,12 @@
 
 Beekeeper is a 3D sandbox game where players manage and optimize a virtual bee ecosystem. The game leverages advanced data structures to enhance performance and handle complex bee and beehive interactions.
 
+## Contributors
 
+- Bryan Chow Wei Qian (bcho0034@student.monash.edu)
+- Kiyu Wen Sui (wkiy0001@student.monash.edu)
+
+  
 ## Badges
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
